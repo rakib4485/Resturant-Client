@@ -139,89 +139,141 @@
 
 import React from "react";
 export const PosReceipt = ({ cartsItems }) => {
-const handlePrint = () => {
-  if (cartsItems.length === 0) return;
-
-  const date = new Date().toLocaleString();
-
-  const kitchenItems = cartsItems.map(item => `
-    <div style="display:flex; justify-content:space-between;">
-      <span>${item.name}</span>
-      <span>x${item.quantity}</span>
-    </div>
-  `).join("");
-
-  const customerItems = cartsItems.map(item => `
-    <div style="display:flex; justify-content:space-between;">
-      <span>${item.name} x${item.quantity}</span>
-      <span>$${item.total}</span>
-    </div>
-  `).join("");
-
-  const total = cartsItems
-    .reduce((acc, item) => acc + parseFloat(item.total), 0)
-    .toFixed(2);
-
   const printContent = `
-    <html>
-      <head>
-        <style>
-          body { width: 80mm; font-family: monospace; padding: 10px; }
-          .center { text-align: center; }
-          .line { border-top: 1px dashed #000; margin: 8px 0; }
-          .bold { font-weight: bold; }
-          .cut { margin: 20px 0; border-top: 2px dashed red; }
-        </style>
-      </head>
-      <body>
+<html>
+<head>
+  <style>
+    body { width: 80mm; font-family: monospace; padding: 10px; }
+    .center { text-align: center; }
+    .line { border-top: 1px dashed #000; margin: 8px 0; }
+    .bold { font-weight: bold; }
+    .cut { margin: 20px 0; border-top: 2px dashed #000; }
+    img { display: block; margin: 0 auto; }
+  </style>
+</head>
+<body>
 
-        <div class="center">
-          <h3>KITCHEN COPY</h3>
-          <p>Token: 01</p>
-          <p>${date}</p>
-        </div>
+  <div class="center">
+    <h3>KITCHEN COPY</h3>
+    <p>Token: 01</p>
+    <p>${date}</p>
+  </div>
 
-        <div class="line"></div>
-        ${kitchenItems}
-        <div class="line"></div>
+  <div class="line"></div>
+  ${kitchenItems}
+  <div class="line"></div>
 
-        <div class="center bold">Prepare Order 🍳</div>
+  <div class="center bold">Prepare Order</div>
 
-        <div class="cut"></div>
+  <div class="cut"></div>
 
-        <div class="center">
-          <h3>Foodie</h3>
-          <p>Customer Copy</p>
-          <p>Token: 01</p>
-          <p>${date}</p>
-        </div>
+  <div class="center">
+    <img src="/logo.png" width="80" />
+    <p><b>Foodie</b></p>
+    <p>Customer Copy</p>
+    <p>Token: 01</p>
+    <p>${date}</p>
+  </div>
 
-        <div class="line"></div>
-        ${customerItems}
-        <div class="line"></div>
+  <div class="line"></div>
+  ${customerItems}
+  <div class="line"></div>
 
-        <div class="bold" style="display:flex; justify-content:space-between;">
-          <span>Total</span>
-          <span>$${total}</span>
-        </div>
+  <div class="bold" style="display:flex; justify-content:space-between;">
+    <span>Total</span>
+    <span>$${total}</span>
+  </div>
 
-        <div class="line"></div>
+  <div class="line"></div>
 
-        <div class="center">Thank You ❤️</div>
+  <div class="center">Thank You ❤️</div>
 
-      </body>
-    </html>
-  `;
+</body>
+</html>
+`;
+// const handlePrint = () => {
+//   if (cartsItems.length === 0) return;
 
-  const win = window.open("", "", "width=300,height=600");
+//   const date = new Date().toLocaleString();
 
-  win.document.write(printContent);
-  win.document.close();
+//   const kitchenItems = cartsItems.map(item => `
+//     <div style="display:flex; justify-content:space-between;">
+//       <span>${item.name}</span>
+//       <span>x${item.quantity}</span>
+//     </div>
+//   `).join("");
 
-  setTimeout(() => {
-    win.print();
-    win.close();
-    setCartItems([]);
-  }, 300);
-};
+//   const customerItems = cartsItems.map(item => `
+//     <div style="display:flex; justify-content:space-between;">
+//       <span>${item.name} x${item.quantity}</span>
+//       <span>$${item.total}</span>
+//     </div>
+//   `).join("");
+
+//   const total = cartsItems
+//     .reduce((acc, item) => acc + parseFloat(item.total), 0)
+//     .toFixed(2);
+
+//   const printContent = `
+//     <html>
+//       <head>
+//         <style>
+//           body { width: 80mm; font-family: monospace; padding: 10px; }
+//           .center { text-align: center; }
+//           .line { border-top: 1px dashed #000; margin: 8px 0; }
+//           .bold { font-weight: bold; }
+//           .cut { margin: 20px 0; border-top: 2px dashed red; }
+//         </style>
+//       </head>
+//       <body>
+
+//         <div class="center">
+//           <h3>KITCHEN COPY</h3>
+//           <p>Token: 01</p>
+//           <p>${date}</p>
+//         </div>
+
+//         <div class="line"></div>
+//         ${kitchenItems}
+//         <div class="line"></div>
+
+//         <div class="center bold">Prepare Order 🍳</div>
+
+//         <div class="cut"></div>
+
+//         <div class="center">
+//           <h3>Foodie</h3>
+//           <p>Customer Copy</p>
+//           <p>Token: 01</p>
+//           <p>${date}</p>
+//         </div>
+
+//         <div class="line"></div>
+//         ${customerItems}
+//         <div class="line"></div>
+
+//         <div class="bold" style="display:flex; justify-content:space-between;">
+//           <span>Total</span>
+//           <span>$${total}</span>
+//         </div>
+
+//         <div class="line"></div>
+
+//         <div class="center">Thank You ❤️</div>
+
+//       </body>
+//     </html>
+//   `;
+
+//   const win = window.open("", "", "width=300,height=600");
+
+//   win.document.write(printContent);
+//   win.document.close();
+
+//   setTimeout(() => {
+//     win.print();
+//     win.close();
+//     setCartItems([]);
+//   }, 300);
+// };
 };
