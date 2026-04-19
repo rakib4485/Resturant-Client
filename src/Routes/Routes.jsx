@@ -4,6 +4,7 @@ import { Main } from "../layouts/Main/Main";
 import { Dashboard } from "../Pages/Dashboard/Dashboard";
 import { Menu } from "../Pages/Menu/Menu";
 import { POS } from "../Pages/POS/POS";
+import AddMenuItem from "../Pages/AddMenuItem/AddmenuItem";
 
 export const router = createBrowserRouter([
     {
@@ -24,7 +25,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/orders",
-                element: <POS/>
+                element: <AddMenuItem/>
             },
         ]     
     }
