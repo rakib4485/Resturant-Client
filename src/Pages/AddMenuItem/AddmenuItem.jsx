@@ -2,19 +2,19 @@ import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 export default function AddMenuItem() {
-  // 🧠 form state
   const [form, setForm] = useState({
     name: "",
     price: "",
     description: "",
     mealTimes: [],
+    image: null, // 🖼️ new
   });
 
   // ===============================
-  // 📥 FETCH MEAL TIMES FROM BACKEND
+  // 📥 FETCH MEAL TIMES
   // ===============================
   const fetchMealTimes = async () => {
-    const res = await fetch("http://localhost:5000/api/time/meal-times");
+    const res = await fetch("https://resturant-backend-chi.vercel.app/api/time/meal-times");
     if (!res.ok) throw new Error("Failed to fetch meal times");
     return res.json();
   };
@@ -25,33 +25,70 @@ export default function AddMenuItem() {
   });
 
   // ===============================
-  // 🔥 MUTATION (CREATE MENU ITEM)
+  // 🔥 MUTATION
   // ===============================
   const mutation = useMutation({
     mutationFn: async (data) => {
-      const res = await fetch("http://localhost:5000/api/menu/menu-items-create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      // 🖼️ STEP 1: Upload image to imagebb
+      let imageUrl = "";
 
-      if (!res.ok) {
+      if (form.image) {
+        const imgData = new FormData();
+        imgData.append("image", form.image);
+
+        const res = await fetch(
+          `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`,
+          {
+            method: "POST",
+            body: imgData,
+          }
+        );
+
+        const imgRes = await res.json();
+
+        if (!imgRes.success) {
+          throw new Error("Image upload failed");
+        }
+
+        imageUrl = imgRes.data.url;
+      }
+
+      // 🧠 STEP 2: send to backend
+      const payload = {
+        name: data.name,
+        price: Number(data.price),
+        description: data.description,
+        mealTimes: data.mealTimes,
+        image: imageUrl, // 👈 send image url
+      };
+
+      const response = await fetch(
+        "https://resturant-backend-chi.vercel.app/api/menu/menu-items-create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
         throw new Error("Failed to create menu item");
       }
 
-      return res.json();
+      return response.json();
     },
 
     onSuccess: () => {
-      alert("✅ Menu Item Added Successfully!");
+      alert("✅ Menu Item Added!");
 
       setForm({
         name: "",
         price: "",
         description: "",
         mealTimes: [],
+        image: null,
       });
     },
 
@@ -61,7 +98,7 @@ export default function AddMenuItem() {
   });
 
   // ===============================
-  // ✍️ HANDLE INPUT CHANGE
+  // HANDLERS
   // ===============================
   const handleChange = (e) => {
     setForm({
@@ -70,9 +107,13 @@ export default function AddMenuItem() {
     });
   };
 
-  // ===============================
-  // 🍔 TOGGLE MEAL TIME SELECT
-  // ===============================
+  const handleImageChange = (e) => {
+    setForm({
+      ...form,
+      image: e.target.files[0],
+    });
+  };
+
   const toggleMealTime = (id) => {
     setForm((prev) => {
       const exists = prev.mealTimes.includes(id);
@@ -86,24 +127,13 @@ export default function AddMenuItem() {
     });
   };
 
-  // ===============================
-  // 🚀 SUBMIT
-  // ===============================
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const payload = {
-      name: form.name,
-      price: Number(form.price),
-      description: form.description,
-      mealTimes: form.mealTimes,
-    };
-
-    mutation.mutate(payload);
+    mutation.mutate(form);
   };
 
   // ===============================
-  // 🎨 UI
+  // UI
   // ===============================
   return (
     <div className="min-h-screen flex items-center justify-center bg-orange-50 p-6">
@@ -115,7 +145,6 @@ export default function AddMenuItem() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-          {/* NAME */}
           <input
             name="name"
             value={form.name}
@@ -125,18 +154,16 @@ export default function AddMenuItem() {
             required
           />
 
-          {/* PRICE */}
           <input
             name="price"
             value={form.price}
             onChange={handleChange}
-            placeholder="Price"
             type="number"
+            placeholder="Price"
             className="border p-3 rounded"
             required
           />
 
-          {/* DESCRIPTION */}
           <textarea
             name="description"
             value={form.description}
@@ -145,9 +172,15 @@ export default function AddMenuItem() {
             className="border p-3 rounded"
           />
 
-          {/* =============================== */}
-          {/* 🍽️ MEAL TIME MULTI SELECT */}
-          {/* =============================== */}
+          {/* 🖼️ IMAGE INPUT */}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="border p-2 rounded"
+          />
+
+          {/* 🍽️ MEAL TIMES */}
           <div>
             <p className="font-semibold mb-2">Meal Times</p>
 
@@ -157,10 +190,10 @@ export default function AddMenuItem() {
                   type="button"
                   key={meal._id}
                   onClick={() => toggleMealTime(meal._id)}
-                  className={`px-4 py-2 rounded-full border text-sm transition ${
+                  className={`px-4 py-2 rounded-full border ${
                     form.mealTimes.includes(meal._id)
                       ? "bg-orange-500 text-white"
-                      : "bg-white text-black"
+                      : "bg-white"
                   }`}
                 >
                   {meal.name}
@@ -169,15 +202,13 @@ export default function AddMenuItem() {
             </div>
           </div>
 
-          {/* SUBMIT */}
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="bg-orange-500 text-white py-3 rounded font-semibold"
+            className="bg-orange-500 text-white py-3 rounded"
           >
-            {mutation.isPending ? "Adding..." : "Add Menu Item"}
+            {mutation.isPending ? "Uploading..." : "Add Item"}
           </button>
-
         </form>
       </div>
     </div>
