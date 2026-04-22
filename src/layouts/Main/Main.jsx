@@ -1,14 +1,14 @@
 import React from 'react'
-import { Navbar } from '../../Shared/Navbar/Navbar'
-// import { Navbar } from '../../Shared/Navbar/Navbar'
-// import { Outlet } from 'react-router-dom'
-// import { Footer } from '../../Shared/Footer/Footer'
-// import { TopNav } from '../../Shared/Navbar/TopNav'
+import { TopNav } from '../../Shared/Navbar/TopNav'
+import { BottomNav } from '../../Shared/Navbar/BottomNav'
+import { Outlet } from 'react-router-dom'
 
 export const Main = () => {
   return (
-    <div>
-        <Navbar/>
-    </div>
+    <div className='relative w-screen h-screen'>
+          <TopNav />
+          <Outlet />
+          <BottomNav/>
+        </div>
   )
 }

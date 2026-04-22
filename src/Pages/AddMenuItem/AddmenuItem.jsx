@@ -14,7 +14,7 @@ export default function AddMenuItem() {
   // 📥 FETCH MEAL TIMES
   // ===============================
   const fetchMealTimes = async () => {
-    const res = await fetch("https://resturant-backend-chi.vercel.app/api/time/meal-times");
+    const res = await fetch("http://localhost:5000/api/time/meal-times");
     if (!res.ok) throw new Error("Failed to fetch meal times");
     return res.json();
   };
@@ -63,7 +63,7 @@ export default function AddMenuItem() {
       };
 
       const response = await fetch(
-        "https://resturant-backend-chi.vercel.app/api/menu/menu-items-create",
+        "http://localhost:5000/api/menu/menu-items-create",
         {
           method: "POST",
           headers: {

@@ -22,8 +22,11 @@ export const OrderModal = ({
     handleConfirm();
   };
 
+  // console.log("Selected Item:", selectedItem);
+
   const handleConfirm = () => {
     setPrintOrder({
+      productId: selectedItem._id,
       name: selectedItem.name,
       price: selectedItem.price,
       quantity: quantity,
@@ -34,6 +37,7 @@ export const OrderModal = ({
     setCartItems([
       ...cartItems,
       {
+        productId: selectedItem._id,
         name: selectedItem.name,
         price: selectedItem.price,
         quantity: quantity,
@@ -54,7 +58,7 @@ export const OrderModal = ({
               <p className="text-gray-600 mb-4">{selectedItem.description}</p>
 
               <p className="font-semibold mb-4">
-                Price: ${selectedItem.price.toFixed(2)}
+                Price: ৳ {selectedItem.price.toFixed(2)}
               </p>
 
               <div className="flex items-center gap-4 mb-4">
@@ -75,7 +79,7 @@ export const OrderModal = ({
                 </button>
               </div>
 
-              <p className="font-bold mb-4">Total: ${total}</p>
+              <p className="font-bold mb-4">Total: ৳ {total}</p>
 
               <div className="flex gap-2">
                 <button
@@ -101,7 +105,7 @@ export const OrderModal = ({
 
               <p className="mb-2">Quantity: {quantity}</p>
 
-              <p className="mb-4 font-semibold">Total: ${total}</p>
+              <p className="mb-4 font-semibold">Total: ৳ {total}</p>
 
               <div className="flex gap-2">
                 <button

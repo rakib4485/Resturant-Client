@@ -6,6 +6,9 @@ import { Menu } from "../Pages/Menu/Menu";
 import { POS } from "../Pages/POS/POS";
 import AddMenuItem from "../Pages/AddMenuItem/AddmenuItem";
 import Products from "../Pages/Dashboard/Products/Products";
+import { AdminLayout } from "../layouts/AdminLayout/AdminLayout";
+import { AdminDashboard } from "../Pages/Dashboard/AdminDashboard/AdminDashboard";
+import { TodayOrders } from "../Pages/Orders/TodayOrders";
 
 export const router = createBrowserRouter([
     {
@@ -26,7 +29,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/orders",
-                element: <AddMenuItem/>
+                element: <TodayOrders />
             },
             {
                 path: "/profile",
@@ -34,5 +37,25 @@ export const router = createBrowserRouter([
             }
             
         ]     
+    },
+    {
+        path: "/admin",
+        element: <AdminLayout />,
+        children: [
+          {
+            path: "/admin",
+            element: <AdminDashboard />
+          },
+          {
+            path: "/admin/products",
+            element: <Products />
+          },
+          {
+            path: "/admin/add-product",
+            element: <AddMenuItem />
+          }
+
+        ]
+
     }
 ]);

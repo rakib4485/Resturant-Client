@@ -19,6 +19,7 @@ export const TopNav = () => {
           <Link to="/menu" className="hover:text-orange-400 transition-colors">Menu</Link>
           <Link to="/orders" className="hover:text-orange-400 transition-colors">Orders</Link>
           <Link to="/profile" className="hover:text-orange-400 transition-colors">Profile</Link>
+          <Link to="/admin" className="hover:text-orange-400 transition-colors">Admin</Link>
         </div>
 
         {/* Mobile Hamburger */}
