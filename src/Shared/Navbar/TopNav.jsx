@@ -1,16 +1,18 @@
 import React from "react";
 import logo from "../../assets/logo.svg";
 import { Link } from "react-router-dom";
+import { useSettings } from "../../context/SettingsContext";
 
 export const TopNav = () => {
+  const { settings, isLoading } = useSettings();
   return (
     <nav className="bg-[#2B3440] shadow-lg p-4">
       <div className="container mx-auto flex justify-between items-center">
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="Food Logo" className="w-10 h-10" />
-          <span className="text-white font-bold text-xl">Foodie</span>
+          <img src={settings?.logo || logo} alt="Food Logo" className="w-10 h-10" />
+          <span className="text-white font-bold text-xl">{settings?.storeName}</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -20,6 +22,7 @@ export const TopNav = () => {
           <Link to="/orders" className="hover:text-orange-400 transition-colors">Orders</Link>
           <Link to="/profile" className="hover:text-orange-400 transition-colors">Profile</Link>
           <Link to="/admin" className="hover:text-orange-400 transition-colors">Admin</Link>
+          <Link to="/auth/login" className="hover:text-orange-400 transition-colors">Login</Link>
         </div>
 
         {/* Mobile Hamburger */}

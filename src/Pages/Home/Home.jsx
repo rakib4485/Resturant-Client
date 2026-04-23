@@ -1,189 +1,111 @@
-import React, { useEffect, useState } from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer
-} from "recharts";
+import React from "react";
+import { Link } from "react-router-dom";
+import logo from "../../assets/logo.svg";
+import { useSettings } from "../../context/SettingsContext";
 
 export const Home = () => {
-
-  const [todaySales, setTodaySales] = useState(0);
-  const [todayOrders, setTodayOrders] = useState(0);
-  const [chartData, setChartData] = useState([]);
-  const [topItems, setTopItems] = useState([]);
-
-  useEffect(() => {
-
-    // 🔥 Dummy Orders (simulate backend data)
-    const dummyOrders = [
-      {
-        total: 25,
-        createdAt: "2026-04-07T09:00:00",
-        items: [{ name: "Pizza", quantity: 2 }]
-      },
-      {
-        total: 15,
-        createdAt: "2026-04-07T10:00:00",
-        items: [{ name: "Burger", quantity: 1 }]
-      },
-      {
-        total: 30,
-        createdAt: "2026-04-07T12:00:00",
-        items: [{ name: "Pizza", quantity: 3 }]
-      },
-      {
-        total: 10,
-        createdAt: "2026-04-07T13:00:00",
-        items: [{ name: "Coffee", quantity: 2 }]
-      },
-      {
-        total: 20,
-        createdAt: "2026-04-07T15:00:00",
-        items: [{ name: "Burger", quantity: 2 }]
-      }
-    ];
-
-    processData(dummyOrders);
-
-  }, []);
-
-  const processData = (data) => {
-
-    const today = new Date().toDateString();
-
-    let total = 0;
-    let count = 0;
-    let hourly = {};
-    let itemCount = {};
-
-    data.forEach(order => {
-
-      const orderDate = new Date(order.createdAt);
-
-      if (orderDate.toDateString() === today) {
-
-        total += order.total;
-        count++;
-
-        // 📊 Hourly sales
-        const hour = orderDate.getHours();
-        hourly[hour] = (hourly[hour] || 0) + order.total;
-
-        // 🔥 Item count
-        order.items.forEach(item => {
-          itemCount[item.name] =
-            (itemCount[item.name] || 0) + item.quantity;
-        });
-
-      }
-
-    });
-
-    setTodaySales(total);
-    setTodayOrders(count);
-
-    // Chart format
-    const chart = Object.keys(hourly).map(h => ({
-      hour: `${h}:00`,
-      sales: hourly[h]
-    }));
-
-    setChartData(chart);
-
-    // Top items
-    const sorted = Object.entries(itemCount)
-      .sort((a, b) => b[1] - a[1]);
-
-    setTopItems(sorted);
-  };
-
+  const { settings, isLoading } = useSettings();
   return (
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-100 pb-24">
 
-    <div className="min-h-screen bg-gray-100 p-6">
+      {/* HERO SECTION */}
+      <div className="flex flex-col items-center justify-center text-center px-4 py-10">
+        <img src={settings?.logo || logo} className="w-24 mb-4" />
 
-      <h1 className="text-3xl font-bold mb-6">
-        📊 Dashboard (Dummy Data)
-      </h1>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 leading-tight">
+          Welcome to <span className="text-orange-500">{settings?.storeName || "Foodie"}</span>
+        </h1>
 
-      {/* Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <p className="text-gray-500 mt-3 max-w-md">
+          Delicious food, fast service, and smooth ordering experience.
+        </p>
 
-        <div className="bg-white p-6 rounded-xl shadow">
-          <h3 className="text-gray-500">Today's Sales</h3>
-          <p className="text-2xl font-bold text-green-500">
-            ${todaySales}
-          </p>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow">
-          <h3 className="text-gray-500">Orders Today</h3>
-          <p className="text-2xl font-bold text-blue-500">
-            {todayOrders}
-          </p>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow">
-          <h3 className="text-gray-500">Avg Order Value</h3>
-          <p className="text-2xl font-bold text-orange-500">
-            $
-            {todayOrders
-              ? (todaySales / todayOrders).toFixed(2)
-              : 0}
-          </p>
-        </div>
-
+        <Link
+          to="/menu"
+          className="mt-6 bg-orange-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-orange-600 transition"
+        >
+          Order Now 🍔
+        </Link>
       </div>
 
-      {/* Chart + Top Items */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* CATEGORY SECTION */}
+      <div className="px-4 md:px-10 mt-8">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+          🍽 Popular Categories
+        </h2>
 
-        {/* Chart */}
-        <div className="bg-white p-6 rounded-xl shadow">
-
-          <h2 className="text-xl font-semibold mb-4">
-            📈 Sales Today
-          </h2>
-
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={chartData}>
-              <XAxis dataKey="hour" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="sales" />
-            </BarChart>
-          </ResponsiveContainer>
-
-        </div>
-
-        {/* Top Items */}
-        <div className="bg-white p-6 rounded-xl shadow">
-
-          <h2 className="text-xl font-semibold mb-4">
-            🔥 Top Items
-          </h2>
-
-          {topItems.map((item, i) => (
-
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { name: "Pizza", icon: "🍕" },
+            { name: "Burger", icon: "🍔" },
+            { name: "Coffee", icon: "☕" },
+            { name: "Meat Box", icon: "🍗" },
+          ].map((cat, index) => (
             <div
-              key={i}
-              className="flex justify-between border-b py-2"
+              key={index}
+              className="bg-white rounded-xl shadow-md p-4 text-center hover:shadow-xl transition cursor-pointer"
             >
-
-              <span>{item[0]}</span>
-              <span>{item[1]}</span>
-
+              <div className="text-4xl">{cat.icon}</div>
+              <p className="mt-2 font-semibold text-gray-700">
+                {cat.name}
+              </p>
             </div>
-
           ))}
-
         </div>
+      </div>
 
+      {/* FEATURED ITEMS */}
+      <div className="px-4 md:px-10 mt-10">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+          🔥 Featured Items
+        </h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+          {[1, 2, 3, 4].map((item) => (
+            <div
+              key={item}
+              className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition"
+            >
+              <div className="h-32 bg-orange-100 flex items-center justify-center text-4xl">
+                🍔
+              </div>
+
+              <div className="p-3">
+                <h3 className="font-bold text-gray-800">
+                  Delicious Item
+                </h3>
+
+                <p className="text-sm text-gray-500">
+                  Tasty and fresh food
+                </p>
+
+                <p className="text-orange-500 font-bold mt-2">
+                  ৳ 250
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* CTA SECTION */}
+      <div className="mt-12 text-center px-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+          Ready to order?
+        </h2>
+
+        <p className="text-gray-500 mt-2">
+          Browse menu and place your order instantly
+        </p>
+
+        <Link
+          to="/menu"
+          className="inline-block mt-5 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-green-600 transition"
+        >
+          Go to Menu →
+        </Link>
       </div>
 
     </div>
   );
 };
-
