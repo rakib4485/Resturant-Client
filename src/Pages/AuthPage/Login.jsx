@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [form, setForm] = useState({
     email: "",
@@ -16,7 +18,7 @@ export const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5000/api/auth/login", {
+    const res = await fetch("https://resturant-backend-chi.vercel.app/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -26,9 +28,7 @@ export const Login = () => {
 
     if (!res.ok) return alert(data.message);
 
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
-
+    login(data);
     alert("Login Success");
 
     navigate("/");

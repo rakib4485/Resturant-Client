@@ -10,6 +10,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { SettingsProvider } from './context/SettingsContext.jsx'
+import { AuthProvider } from './context/AuthContext.jsx'
 // import { getTodos, postTodo } from '../my-api'
 
 // Create a client
@@ -17,10 +18,12 @@ const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
       <SettingsProvider>
         <App />
       </SettingsProvider>
     </QueryClientProvider>
+    </AuthProvider>
   </StrictMode>,
 )

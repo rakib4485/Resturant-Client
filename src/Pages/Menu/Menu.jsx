@@ -8,6 +8,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import logo from "../../assets/logo.svg";
 import { FaTrash } from "react-icons/fa";
+import { authHeader } from "../../utils/API";
 
 export const Menu = () => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -23,7 +24,9 @@ export const Menu = () => {
   // 📥 FETCH MEAL TIMES
   // ===============================
   const fetchMealTimes = async () => {
-    const res = await fetch("http://localhost:5000/api/time/meal-times");
+    const res = await fetch("https://resturant-backend-chi.vercel.app/api/time/meal-times", {
+      headers: authHeader(),
+    });
     if (!res.ok) throw new Error("Failed to fetch meal times");
     return res.json();
   };
@@ -43,7 +46,9 @@ export const Menu = () => {
   // 📥 FETCH MENU ITEMS
   // ===============================
   const fetchMenuItems = async () => {
-    const res = await fetch("http://localhost:5000/api/menu/menu-items");
+    const res = await fetch("https://resturant-backend-chi.vercel.app/api/menu/menu-items", {
+      headers: authHeader(),
+    });
     if (!res.ok) throw new Error("Failed to fetch menu items");
     return res.json();
   };
@@ -90,11 +95,9 @@ export const Menu = () => {
   const createOrderMutation = useMutation({
     mutationFn: async (orderData) => {
       console.log("Creating order with data:", orderData);
-      const res = await fetch("http://localhost:5000/api/orders/create", {
+      const res = await fetch("https://resturant-backend-chi.vercel.app/api/orders/create", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: authHeader(),
         body: JSON.stringify(orderData),
       });
 
@@ -144,7 +147,9 @@ export const Menu = () => {
   // 🧠 Token Calculation
   // ===============================
   const fetchTodayLastOrder = async () => {
-    const res = await fetch("http://localhost:5000/api/orders/today-last");
+    const res = await fetch("https://resturant-backend-chi.vercel.app/api/orders/today-last", {
+      headers: authHeader(),
+    });
     if (!res.ok) throw new Error("Failed to fetch last order");
     return res.json();
   };

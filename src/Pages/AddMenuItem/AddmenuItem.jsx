@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { authHeader } from "../../utils/API";
 
 export default function AddMenuItem() {
   const [form, setForm] = useState({
@@ -14,7 +15,9 @@ export default function AddMenuItem() {
   // 📥 FETCH MEAL TIMES
   // ===============================
   const fetchMealTimes = async () => {
-    const res = await fetch("http://localhost:5000/api/time/meal-times");
+    const res = await fetch("https://resturant-backend-chi.vercel.app/api/time/meal-times", {
+      headers: authHeader(),
+    });
     if (!res.ok) throw new Error("Failed to fetch meal times");
     return res.json();
   };
@@ -63,12 +66,10 @@ export default function AddMenuItem() {
       };
 
       const response = await fetch(
-        "http://localhost:5000/api/menu/menu-items-create",
+        "https://resturant-backend-chi.vercel.app/api/menu/menu-items-create",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: authHeader(),
           body: JSON.stringify(payload),
         }
       );

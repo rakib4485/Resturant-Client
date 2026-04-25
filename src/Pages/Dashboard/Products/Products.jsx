@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { FaEdit } from "react-icons/fa";
+import { authHeader } from "../../../utils/API";
 
 export default function Products() {
   const queryClient = useQueryClient();
@@ -13,7 +14,10 @@ export default function Products() {
   // ===============================
   const fetchProducts = async () => {
     const res = await fetch(
-      "http://localhost:5000/api/menu/menu-items"
+      "https://resturant-backend-chi.vercel.app/api/menu/menu-items",
+      {
+        headers: authHeader(),
+      }
     );
     if (!res.ok) throw new Error("Failed to fetch products");
     return res.json();
@@ -28,7 +32,9 @@ export default function Products() {
   // 🍽 FETCH MEAL TIMES
   // ===============================
   const fetchMealTimes = async () => {
-    const res = await fetch("http://localhost:5000/api/time/meal-times");
+    const res = await fetch("https://resturant-backend-chi.vercel.app/api/time/meal-times", {
+      headers: authHeader(),
+    });
     if (!res.ok) throw new Error("Failed to fetch meal times");
     return res.json();
   };
@@ -63,12 +69,10 @@ export default function Products() {
   const updateMutation = useMutation({
     mutationFn: async (data) => {
       const res = await fetch(
-        `http://localhost:5000/api/menu/menu-items/${data._id}`,
+        `https://resturant-backend-chi.vercel.app/api/menu/menu-items/${data._id}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: authHeader(),
           body: JSON.stringify(data),
         }
       );

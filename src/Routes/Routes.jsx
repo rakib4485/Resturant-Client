@@ -13,6 +13,8 @@ import { AdminSettings } from "../Pages/Dashboard/AdminSettings/AdminSettings";
 import { AuthLayout } from "../layouts/AuthLayout/AuthLayout";
 import { Login } from "../Pages/AuthPage/Login";
 import { Register } from "../Pages/AuthPage/Register";
+import { AdminRoute } from "./AdminRoute";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
     {
@@ -29,22 +31,22 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/menu",
-                element: <Menu/>
+                element: <ProtectedRoute><Menu/></ProtectedRoute>
             },
             {
                 path: "/orders",
-                element: <TodayOrders />
+                element: <ProtectedRoute><TodayOrders/></ProtectedRoute>
             },
             {
                 path: "/profile",
-                element: <Products/>
+                element: <ProtectedRoute><Products/></ProtectedRoute>
             }
             
         ]     
     },
     {
         path: "/admin",
-        element: <AdminLayout />,
+        element: <AdminRoute><AdminLayout/></AdminRoute>,
         children: [
           {
             path: "/admin",

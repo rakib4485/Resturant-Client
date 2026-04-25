@@ -1,12 +1,15 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import { authHeader } from "../../utils/API";
 
 export const TodayOrders = () => {
   // ===============================
   // 📥 FETCH TODAY ORDERS
   // ===============================
   const fetchTodayOrders = async () => {
-    const res = await fetch("http://localhost:5000/api/orders/today");
+    const res = await fetch("https://resturant-backend-chi.vercel.app/api/orders/today", {
+      headers: authHeader(),
+    });
     if (!res.ok) throw new Error("Failed to fetch orders");
     return res.json();
   };

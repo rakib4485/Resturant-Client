@@ -5,7 +5,7 @@ const SettingsContext = createContext();
 
 export const SettingsProvider = ({ children }) => {
   const fetchSettings = async () => {
-    const res = await fetch("http://localhost:5000/api/settings");
+    const res = await fetch("https://resturant-backend-chi.vercel.app/api/settings");
     return res.json();
   };
 

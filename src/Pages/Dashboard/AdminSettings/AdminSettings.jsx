@@ -9,7 +9,7 @@ export const AdminSettings = () => {
   // 📥 FETCH SETTINGS
   // ===============================
   const fetchSettings = async () => {
-    const res = await fetch("http://localhost:5000/api/settings");
+    const res = await fetch("https://resturant-backend-chi.vercel.app/api/settings");
     return res.json();
   };
 
@@ -49,7 +49,7 @@ export const AdminSettings = () => {
   // ===============================
   const updateMutation = useMutation({
     mutationFn: async (data) => {
-      const res = await fetch("http://localhost:5000/api/settings", {
+      const res = await fetch("https://resturant-backend-chi.vercel.app/api/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
