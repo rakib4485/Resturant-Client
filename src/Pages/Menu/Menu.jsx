@@ -9,6 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import logo from "../../assets/logo.svg";
 import { FaTrash } from "react-icons/fa";
 import { authHeader } from "../../utils/API";
+import { useSettings } from "../../context/SettingsContext";
 
 export const Menu = () => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -19,12 +20,13 @@ export const Menu = () => {
   const [cartOpen, setCartOpen] = useState(true);
   const [cartsItems, setCartItems] = useState([]);
   const [token, setToken] = useState(0);
+  const { settings } = useSettings();
 
   // ===============================
   // 📥 FETCH MEAL TIMES
   // ===============================
   const fetchMealTimes = async () => {
-    const res = await fetch("https://resturant-backend-chi.vercel.app/api/time/meal-times", {
+    const res = await fetch("http://localhost:5000/api/time/meal-times", {
       headers: authHeader(),
     });
     if (!res.ok) throw new Error("Failed to fetch meal times");
@@ -46,7 +48,7 @@ export const Menu = () => {
   // 📥 FETCH MENU ITEMS
   // ===============================
   const fetchMenuItems = async () => {
-    const res = await fetch("https://resturant-backend-chi.vercel.app/api/menu/menu-items", {
+    const res = await fetch("http://localhost:5000/api/menu/menu-items", {
       headers: authHeader(),
     });
     if (!res.ok) throw new Error("Failed to fetch menu items");
@@ -95,7 +97,7 @@ export const Menu = () => {
   const createOrderMutation = useMutation({
     mutationFn: async (orderData) => {
       console.log("Creating order with data:", orderData);
-      const res = await fetch("https://resturant-backend-chi.vercel.app/api/orders/create", {
+      const res = await fetch("http://localhost:5000/api/orders/create", {
         method: "POST",
         headers: authHeader(),
         body: JSON.stringify(orderData),
@@ -147,7 +149,7 @@ export const Menu = () => {
   // 🧠 Token Calculation
   // ===============================
   const fetchTodayLastOrder = async () => {
-    const res = await fetch("https://resturant-backend-chi.vercel.app/api/orders/today-last", {
+    const res = await fetch("http://localhost:5000/api/orders/today-last", {
       headers: authHeader(),
     });
     if (!res.ok) throw new Error("Failed to fetch last order");
@@ -215,7 +217,7 @@ export const Menu = () => {
 
    <div class="center">
      <h3>KITCHEN COPY</h3>
-     <p>Token: ${token}</p>
+     <p>Token: ${getNextToken()}</p>
      <p>${date}</p>
    </div>
 
@@ -228,10 +230,10 @@ export const Menu = () => {
    <div class="cut"></div>
 
    <div class="center">
-     <img src="logo.png" width="80" />
-     <p><b>Foodie</b></p>
+     <img src=${settings?.logo} width="80" />
+     <p><b>${settings?.storeName || "Foodie"}</b></p>
      <p>Customer Copy</p>
-     <p>Token: ${token}</p>
+     <p>Token: ${getNextToken()}</p>
      <p>${date}</p>
    </div>
 

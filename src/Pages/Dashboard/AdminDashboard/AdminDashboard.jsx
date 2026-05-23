@@ -14,7 +14,7 @@ export const AdminDashboard = () => {
   // ===============================
   const fetchDashboard = async () => {
     const res = await fetch(
-      `https://resturant-backend-chi.vercel.app/api/admin/dashboard?date=${date}`,
+      `http://localhost:5000/api/admin/dashboard?date=${date}`,
       {
       headers: {
         Authorization: `Bearer ${token}`, // 🔥 send token

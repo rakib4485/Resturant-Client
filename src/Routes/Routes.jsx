@@ -15,6 +15,7 @@ import { Login } from "../Pages/AuthPage/Login";
 import { Register } from "../Pages/AuthPage/Register";
 import { AdminRoute } from "./AdminRoute";
 import { ProtectedRoute } from "./ProtectedRoute";
+import { TestPrinter } from "../Pages/TestPages/TestPrinter";
 
 export const router = createBrowserRouter([
     {
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
             {
                 path: "/profile",
                 element: <ProtectedRoute><Products/></ProtectedRoute>
+            },
+            {
+                path: "/test",
+                element: <TestPrinter/>
             }
             
         ]     
