@@ -51,6 +51,7 @@ export const TopNav = () => {
           <Link to="/" className="hover:text-orange-400">Home</Link>
           <Link to="/menu" className="hover:text-orange-400">Menu</Link>
           <Link to="/orders" className="hover:text-orange-400">Orders</Link>
+          <Link to="/test" className="hover:text-orange-400">Test</Link>
 
           {/* 🔥 If logged in */}
           {user ? (
