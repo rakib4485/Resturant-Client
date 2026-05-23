@@ -97,6 +97,7 @@ export const TopNav = () => {
             <li><Link to="/">Home</Link></li>
             <li><Link to="/menu">Menu</Link></li>
             <li><Link to="/orders">Orders</Link></li>
+            <li><Link to="/orders">Orders</Link></li>
 
             {user ? (
               <>
